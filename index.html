@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OCULUS // VECTOR-SEEK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- ambient background layer: scattered watching eyes + scanlines -->
+  <div class="bg-noise"></div>
+  <div class="scanline-overlay"></div>
+  <div id="bg-eyes" class="bg-eyes" aria-hidden="true"></div>
+
+  <!-- aperture reveal on load -->
+  <div id="aperture" class="aperture" aria-hidden="true"></div>
+
+  <div class="wrap">
+
+    <header class="site-header">
+      <div class="stamp">CLASSIFIED // LOCAL ACCESS ONLY</div>
+      <h1 class="logo">
+        <span class="logo-o">O</span>CULUS<span class="cursor">_</span>
+      </h1>
+      <p class="tagline">VECTOR-SEEK SUBJECT RETRIEVAL SYSTEM &nbsp;·&nbsp; ALL QUERIES ARE LOGGED</p>
+    </header>
+
+    <main>
+
+      <section class="console" aria-label="Query console">
+        <div class="console-eye" id="console-eye">
+          <svg viewBox="0 0 200 120" class="eye-svg" id="eye-svg">
+            <path id="eyelid-top" d="M0,60 Q100,0 200,60 L200,60 Q100,60 0,60 Z" class="eyelid" />
+            <path id="eyelid-bottom" d="M0,60 Q100,120 200,60 L200,60 Q100,60 0,60 Z" class="eyelid" />
+            <g id="iris-group">
+              <circle cx="100" cy="60" r="34" class="iris" />
+              <circle cx="100" cy="60" r="14" class="pupil" id="pupil" />
+              <line x1="100" y1="26" x2="100" y2="94" class="reticle" />
+              <line x1="66" y1="60" x2="134" y2="60" class="reticle" />
+            </g>
+          </svg>
+          <div class="radar-sweep" id="radar-sweep"></div>
+        </div>
+
+        <form id="query-form" class="query-form" autocomplete="off">
+          <label for="query-input" class="query-label">SUBJECT QUERY //</label>
+          <div class="input-row">
+            <span class="prompt-glyph">&gt;</span>
+            <input
+              type="text"
+              id="query-input"
+              class="query-input"
+              placeholder="describe what you are looking for..."
+              required
+            />
+            <button type="submit" class="scan-btn" id="scan-btn">SCAN</button>
+          </div>
+          <div class="status-line" id="status-line">SYSTEM IDLE // AWAITING INPUT</div>
+        </form>
+      </section>
+
+      <section class="results" id="results" aria-live="polite">
+        <!-- dossier cards get injected here by app.js -->
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-status">
+        <span class="dot" id="live-dot"></span> SURVEILLANCE ACTIVE
+      </div>
+      <div class="footer-meta">VECTOR-SEEK ENGINE // BUILD LOCAL // NODE: <span id="node-id"></span></div>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

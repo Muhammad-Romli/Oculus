@@ -1,0 +1,503 @@
+/* ============================================================
+   OCULUS // VECTOR-SEEK — surveillance-archive cyberpunk theme
+   Palette: amber CRT phosphor on void black, redaction red accent
+   ============================================================ */
+
+:root {
+  --void:        #0b0a08;
+  --void-2:      #131110;
+  --panel:       #1b1814;
+  --panel-edge:  #2c2620;
+  --amber:       #ffb000;
+  --amber-dim:   #8a6100;
+  --amber-faint: rgba(255, 176, 0, 0.14);
+  --amber-glow:  rgba(255, 176, 0, 0.45);
+  --redact:      #ff2b2b;
+  --redact-dim:  #6e1414;
+  --paper:       #cabd9d;
+  --font-display: 'VT323', monospace;
+  --font-mono:    'Share Tech Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--void);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+}
+
+::selection {
+  background: var(--amber);
+  color: var(--void);
+}
+
+/* -------------------------------------------------------
+   Ambient background: noise, scanlines, drifting watchers
+   ------------------------------------------------------- */
+
+.bg-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(255,176,0,0.05), transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(255,43,43,0.04), transparent 55%),
+    var(--void);
+}
+
+.scanline-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0px,
+    rgba(0,0,0,0) 2px,
+    rgba(0,0,0,0.18) 3px,
+    rgba(0,0,0,0) 4px
+  );
+  mix-blend-mode: multiply;
+  animation: scan-drift 9s linear infinite;
+}
+
+@keyframes scan-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 0 100px; }
+}
+
+.bg-eyes {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-eye {
+  position: absolute;
+  width: 10px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--amber-dim);
+  box-shadow: 0 0 6px var(--amber-glow);
+  opacity: 0.35;
+  animation-name: bg-blink;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bg-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95%           { transform: scaleY(0.08); }
+}
+
+/* -------------------------------------------------------
+   Aperture load-in
+   ------------------------------------------------------- */
+
+.aperture {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--void);
+  clip-path: circle(140% at 50% 40%);
+  animation: aperture-open 1.1s 0.15s cubic-bezier(.7,0,.2,1) forwards;
+  pointer-events: none;
+}
+
+@keyframes aperture-open {
+  from { clip-path: circle(140% at 50% 40%); }
+  to   { clip-path: circle(0% at 50% 40%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aperture { animation: none; clip-path: circle(0% at 50% 40%); }
+}
+
+/* -------------------------------------------------------
+   Layout shell
+   ------------------------------------------------------- */
+
+.wrap {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+/* -------------------------------------------------------
+   Header
+   ------------------------------------------------------- */
+
+.site-header {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.stamp {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--redact);
+  border: 1px solid var(--redact-dim);
+  padding: 3px 10px;
+  margin-bottom: 18px;
+  background: rgba(255,43,43,0.06);
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 64px;
+  letter-spacing: 6px;
+  margin: 0;
+  color: var(--amber);
+  text-shadow: 0 0 12px var(--amber-glow), 0 0 2px var(--amber);
+}
+
+.logo-o {
+  display: inline-block;
+  color: var(--void);
+  background: var(--amber);
+  border-radius: 50%;
+  width: 0.85em;
+  height: 0.85em;
+  line-height: 0.85em;
+  text-align: center;
+  text-shadow: none;
+}
+
+.cursor {
+  animation: blink-cursor 1s steps(1) infinite;
+}
+
+@keyframes blink-cursor {
+  50% { opacity: 0; }
+}
+
+.tagline {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--amber-dim);
+  margin-top: 10px;
+}
+
+/* -------------------------------------------------------
+   Console / query panel
+   ------------------------------------------------------- */
+
+.console {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  padding: 32px 28px 24px;
+  position: relative;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.console::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  opacity: 0.6;
+}
+
+.console-eye {
+  position: relative;
+  width: 160px;
+  height: 96px;
+  margin: 0 auto 20px;
+}
+
+.eye-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.eyelid {
+  fill: var(--panel);
+}
+
+.iris {
+  fill: none;
+  stroke: var(--amber-dim);
+  stroke-width: 2;
+}
+
+.pupil {
+  fill: var(--amber);
+  filter: drop-shadow(0 0 6px var(--amber-glow));
+  transition: transform 0.06s linear;
+  transform-origin: 100px 60px;
+  animation: blink-eye 6s ease-in-out infinite;
+}
+
+.reticle {
+  stroke: var(--amber-dim);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+#iris-group {
+  animation: blink-eye 6s ease-in-out infinite;
+  transform-origin: 100px 60px;
+}
+
+@keyframes blink-eye {
+  0%, 94%, 100% { transform: scaleY(1); }
+  96%           { transform: scaleY(0.06); }
+}
+
+.radar-sweep {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--amber-faint), transparent 40%);
+  animation: sweep 3.2s linear infinite;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+@keyframes sweep {
+  to { transform: translateX(-50%) rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pupil, #iris-group, .radar-sweep, .bg-eye, .cursor { animation: none; }
+}
+
+/* -------------------------------------------------------
+   Query form
+   ------------------------------------------------------- */
+
+.query-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--amber-dim);
+  margin-bottom: 8px;
+}
+
+.input-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--amber-dim);
+  background: var(--void-2);
+}
+
+.prompt-glyph {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: var(--amber);
+  font-size: 18px;
+}
+
+.query-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  padding: 14px 10px;
+}
+
+.query-input::placeholder {
+  color: var(--amber-dim);
+  opacity: 0.7;
+}
+
+.query-input:focus {
+  background: var(--amber-faint);
+}
+
+.scan-btn {
+  background: var(--amber);
+  color: var(--void);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 2px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.scan-btn:hover {
+  background: #ffc94d;
+  box-shadow: 0 0 16px var(--amber-glow);
+}
+
+.scan-btn:active {
+  background: #cc8c00;
+}
+
+.status-line {
+  margin-top: 14px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--amber-dim);
+  min-height: 16px;
+}
+
+.status-line.is-scanning {
+  color: var(--amber);
+  animation: status-pulse 1s ease-in-out infinite;
+}
+
+.status-line.is-error {
+  color: var(--redact);
+}
+
+@keyframes status-pulse {
+  50% { opacity: 0.4; }
+}
+
+/* -------------------------------------------------------
+   Results / dossier cards
+   ------------------------------------------------------- */
+
+.results {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dossier {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-left: 3px solid var(--amber-dim);
+  padding: 16px 18px;
+  position: relative;
+  animation: dossier-in 0.35s ease both;
+}
+
+@keyframes dossier-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dossier-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.dossier-id {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--amber-dim);
+}
+
+.dossier-score {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--amber);
+  white-space: nowrap;
+}
+
+.dossier-body {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--paper);
+}
+
+.dossier-meta {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--amber-dim);
+  border-top: 1px dashed var(--panel-edge);
+  padding-top: 8px;
+}
+
+.no-results, .error-block {
+  text-align: center;
+  padding: 30px 10px;
+  color: var(--amber-dim);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.error-block { color: var(--redact); }
+
+/* -------------------------------------------------------
+   Footer
+   ------------------------------------------------------- */
+
+.site-footer {
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--amber-dim);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--redact);
+  box-shadow: 0 0 6px var(--redact);
+  animation: dot-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  50% { opacity: 0.25; }
+}
+
+/* -------------------------------------------------------
+   Responsive
+   ------------------------------------------------------- */
+
+@media (max-width: 520px) {
+  .logo { font-size: 44px; letter-spacing: 3px; }
+  .console { padding: 24px 16px 18px; }
+  .input-row { flex-wrap: wrap; }
+  .scan-btn { width: 100%; padding: 12px 0; }
+  .dossier-head { flex-direction: column; align-items: flex-start; }
+}
+
+/* -------------------------------------------------------
+   Accessible focus states
+   ------------------------------------------------------- */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
