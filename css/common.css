@@ -1,5 +1,6 @@
 /* ============================================================
    OCULUS // VECTOR-SEEK — surveillance-archive cyberpunk theme
+   common.css — shared across index.html, build.html, search.html
    Palette: amber CRT phosphor on void black, redaction red accent
    ============================================================ */
 
@@ -138,7 +139,7 @@ body {
 }
 
 /* -------------------------------------------------------
-   Header
+   Header + nav
    ------------------------------------------------------- */
 
 .site-header {
@@ -164,6 +165,10 @@ body {
   margin: 0;
   color: var(--amber);
   text-shadow: 0 0 12px var(--amber-glow), 0 0 2px var(--amber);
+}
+
+.logo-link {
+  text-decoration: none;
 }
 
 .logo-o {
@@ -193,8 +198,45 @@ body {
   margin-top: 10px;
 }
 
+.site-nav {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 24px;
+  border: 1px solid var(--panel-edge);
+  background: var(--panel);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-nav a {
+  display: block;
+  padding: 10px 20px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--amber-dim);
+  text-decoration: none;
+  border-right: 1px solid var(--panel-edge);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.site-nav a:last-child {
+  border-right: none;
+}
+
+.site-nav a:hover {
+  color: var(--amber);
+  background: var(--amber-faint);
+}
+
+.site-nav a.is-active {
+  color: var(--void);
+  background: var(--amber);
+}
+
 /* -------------------------------------------------------
-   Console / query panel
+   Console / eye component (shared by Build + Search)
    ------------------------------------------------------- */
 
 .console {
@@ -242,7 +284,10 @@ body {
   filter: drop-shadow(0 0 6px var(--amber-glow));
   transition: transform 0.06s linear;
   transform-origin: 100px 60px;
-  animation: blink-eye 6s ease-in-out infinite;
+  /* no animation here on purpose — JS drives this element's transform
+     for cursor tracking; the blink is applied to #iris-group instead,
+     since a CSS animation on this element would fight the JS transform
+     every frame and cursor tracking would never visibly move it. */
 }
 
 .reticle {
@@ -283,75 +328,6 @@ body {
   .pupil, #iris-group, .radar-sweep, .bg-eye, .cursor { animation: none; }
 }
 
-/* -------------------------------------------------------
-   Query form
-   ------------------------------------------------------- */
-
-.query-label {
-  display: block;
-  font-size: 12px;
-  letter-spacing: 2px;
-  color: var(--amber-dim);
-  margin-bottom: 8px;
-}
-
-.input-row {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  border: 1px solid var(--amber-dim);
-  background: var(--void-2);
-}
-
-.prompt-glyph {
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  color: var(--amber);
-  font-size: 18px;
-}
-
-.query-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--amber);
-  font-family: var(--font-mono);
-  font-size: 16px;
-  padding: 14px 10px;
-}
-
-.query-input::placeholder {
-  color: var(--amber-dim);
-  opacity: 0.7;
-}
-
-.query-input:focus {
-  background: var(--amber-faint);
-}
-
-.scan-btn {
-  background: var(--amber);
-  color: var(--void);
-  border: none;
-  font-family: var(--font-display);
-  font-size: 20px;
-  letter-spacing: 2px;
-  padding: 0 24px;
-  cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
-}
-
-.scan-btn:hover {
-  background: #ffc94d;
-  box-shadow: 0 0 16px var(--amber-glow);
-}
-
-.scan-btn:active {
-  background: #cc8c00;
-}
-
 .status-line {
   margin-top: 14px;
   font-size: 12px;
@@ -371,67 +347,6 @@ body {
 
 @keyframes status-pulse {
   50% { opacity: 0.4; }
-}
-
-/* -------------------------------------------------------
-   Results / dossier cards
-   ------------------------------------------------------- */
-
-.results {
-  margin-top: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.dossier {
-  background: var(--panel);
-  border: 1px solid var(--panel-edge);
-  border-left: 3px solid var(--amber-dim);
-  padding: 16px 18px;
-  position: relative;
-  animation: dossier-in 0.35s ease both;
-}
-
-@keyframes dossier-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.dossier-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 8px;
-  gap: 12px;
-}
-
-.dossier-id {
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  color: var(--amber-dim);
-}
-
-.dossier-score {
-  font-family: var(--font-display);
-  font-size: 20px;
-  color: var(--amber);
-  white-space: nowrap;
-}
-
-.dossier-body {
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--paper);
-}
-
-.dossier-meta {
-  margin-top: 10px;
-  font-size: 11px;
-  letter-spacing: 1px;
-  color: var(--amber-dim);
-  border-top: 1px dashed var(--panel-edge);
-  padding-top: 8px;
 }
 
 .no-results, .error-block {
@@ -480,15 +395,13 @@ body {
 }
 
 /* -------------------------------------------------------
-   Responsive
+   Responsive (shared)
    ------------------------------------------------------- */
 
 @media (max-width: 520px) {
   .logo { font-size: 44px; letter-spacing: 3px; }
   .console { padding: 24px 16px 18px; }
-  .input-row { flex-wrap: wrap; }
-  .scan-btn { width: 100%; padding: 12px 0; }
-  .dossier-head { flex-direction: column; align-items: flex-start; }
+  .site-nav { flex-wrap: wrap; width: auto; }
 }
 
 /* -------------------------------------------------------

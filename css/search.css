@@ -1,0 +1,140 @@
+/* ============================================================
+   OCULUS // VECTOR-SEEK — search.html specific styles
+   Shared theme lives in common.css — load that first.
+   ============================================================ */
+
+.query-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--amber-dim);
+  margin-bottom: 8px;
+}
+
+.input-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--amber-dim);
+  background: var(--void-2);
+}
+
+.prompt-glyph {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: var(--amber);
+  font-size: 18px;
+}
+
+.query-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  padding: 14px 10px;
+}
+
+.query-input::placeholder {
+  color: var(--amber-dim);
+  opacity: 0.7;
+}
+
+.query-input:focus {
+  background: var(--amber-faint);
+}
+
+.scan-btn {
+  background: var(--amber);
+  color: var(--void);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 2px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.scan-btn:hover {
+  background: #ffc94d;
+  box-shadow: 0 0 16px var(--amber-glow);
+}
+
+.scan-btn:active {
+  background: #cc8c00;
+}
+
+/* -------------------------------------------------------
+   Results / dossier cards
+   ------------------------------------------------------- */
+
+.results {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dossier {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-left: 3px solid var(--amber-dim);
+  padding: 16px 18px;
+  position: relative;
+  animation: dossier-in 0.35s ease both;
+}
+
+@keyframes dossier-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dossier-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.dossier-id {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--amber-dim);
+}
+
+.dossier-score {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--amber);
+  white-space: nowrap;
+}
+
+.dossier-body {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--paper);
+}
+
+.dossier-meta {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--amber-dim);
+  border-top: 1px dashed var(--panel-edge);
+  padding-top: 8px;
+}
+
+/* -------------------------------------------------------
+   Responsive
+   ------------------------------------------------------- */
+
+@media (max-width: 520px) {
+  .input-row { flex-wrap: wrap; }
+  .scan-btn { width: 100%; padding: 12px 0; }
+  .dossier-head { flex-direction: column; align-items: flex-start; }
+}

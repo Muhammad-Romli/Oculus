@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OCULUS // VECTOR-SEEK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+  <!-- ambient background layer: scattered watching eyes + scanlines -->
+  <div class="bg-noise"></div>
+  <div class="scanline-overlay"></div>
+  <div id="bg-eyes" class="bg-eyes" aria-hidden="true"></div>
+
+  <!-- aperture reveal on load -->
+  <div id="aperture" class="aperture" aria-hidden="true"></div>
+
+  <div class="wrap">
+
+    <header class="site-header">
+      <div class="stamp">CLASSIFIED // LOCAL ACCESS ONLY</div>
+      <h1 class="logo">
+        <span class="logo-o">O</span>CULUS<span class="cursor">_</span>
+      </h1>
+      <p class="tagline">A BROWSER-BASED FRONT END FOR VECTOR-SEEK</p>
+      <nav class="site-nav">
+        <a href="index.html">HOME</a>
+        <a href="build.html">BUILD</a>
+        <a href="search.html">SEARCH</a>
+      </nav>
+    </header>
+
+    <main>
+
+      <p class="intro">
+        <a href="github.com/Muhammad-Romli/Vector-Seek">Vector-Seek</a> is a semantic search engine — it retrieves results by
+        <span class="highlight">meaning</span>, not keyword matching. Oculus
+        gives it a browser interface, so instead of running <code>build.sh</code>
+        and <code>search.sh</code> from a terminal, you can build embeddings and
+        run searches from a web page.
+      </p>
+
+      <blockquote class="dossier-quote">
+        "In the archive, nothing is forgotten. Every query becomes a record;
+        every record, a subject."
+        <cite>— OCULUS PROTOCOL, EXCERPT VII</cite>
+      </blockquote>
+
+      <div class="entry-grid">
+        <a href="build.html" class="entry-card">
+          <div class="entry-tag">01 // PIPELINE</div>
+          <div class="entry-title">BUILD</div>
+          <p class="entry-desc">Submit files to Vector-Seek and generate embeddings for them.</p>
+        </a>
+
+        <a href="search.html" class="entry-card">
+          <div class="entry-tag">02 // RETRIEVAL</div>
+          <div class="entry-title">SEARCH</div>
+          <p class="entry-desc">Enter a query and view the top matching results.</p>
+        </a>
+      </div>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-status">
+        <span class="dot" id="live-dot"></span> SURVEILLANCE ACTIVE
+      </div>
+      <div class="footer-meta">VECTOR-SEEK ENGINE // BUILD LOCAL // NODE: <span id="node-id"></span></div>
+    </footer>
+
+  </div>
+
+  <script src="js/common.js"></script>
+</body>
+</html>

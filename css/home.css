@@ -1,0 +1,106 @@
+/* ============================================================
+   OCULUS // VECTOR-SEEK — index.html (Home) specific styles
+   Shared theme lives in common.css — load that first.
+   ============================================================ */
+
+.intro {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--paper);
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto 40px;
+}
+
+.intro .highlight {
+  color: var(--amber);
+}
+
+.dossier-quote {
+  margin: 0 auto 40px;
+  max-width: 480px;
+  padding: 18px 22px;
+  border-left: 3px solid var(--redact-dim);
+  background: rgba(255, 43, 43, 0.04);
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--paper);
+  text-align: left;
+}
+
+.dossier-quote cite {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--redact);
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.entry-card {
+  display: block;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  padding: 24px 20px;
+  text-decoration: none;
+  position: relative;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.entry-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.entry-card:hover,
+.entry-card:focus-visible {
+  border-color: var(--amber-dim);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+}
+
+.entry-card:hover::before,
+.entry-card:focus-visible::before {
+  opacity: 0.6;
+}
+
+.entry-tag {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--redact);
+}
+
+.entry-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 2px;
+  color: var(--amber);
+  margin: 8px 0 6px;
+}
+
+.entry-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--amber-dim);
+}
+
+/* -------------------------------------------------------
+   Responsive
+   ------------------------------------------------------- */
+
+@media (max-width: 520px) {
+  .entry-grid { grid-template-columns: 1fr; }
+}

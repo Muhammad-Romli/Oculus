@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OCULUS // SEARCH</title>
+<title>OCULUS // BUILD</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/common.css">
-<link rel="stylesheet" href="css/search.css">
+<link rel="stylesheet" href="css/build.css">
 </head>
 <body>
 
@@ -29,7 +29,7 @@
           <span class="logo-o">O</span>CULUS<span class="cursor">_</span>
         </h1>
       </a>
-      <p class="tagline">VECTOR-SEEK SUBJECT RETRIEVAL SYSTEM &nbsp;·&nbsp; ALL QUERIES ARE LOGGED</p>
+      <p class="tagline">VECTOR-SEEK INDEX BUILD PIPELINE &nbsp;·&nbsp; ALL SUBMISSIONS ARE LOGGED</p>
       <nav class="site-nav">
         <a href="index.html">HOME</a>
         <a href="build.html">BUILD</a>
@@ -39,7 +39,7 @@
 
     <main>
 
-      <section class="console" aria-label="Query console">
+      <section class="console" aria-label="Build console">
         <div class="console-eye" id="console-eye">
           <svg viewBox="0 0 200 120" class="eye-svg" id="eye-svg">
             <path id="eyelid-top" d="M0,60 Q100,0 200,60 L200,60 Q100,60 0,60 Z" class="eyelid" />
@@ -54,25 +54,40 @@
           <div class="radar-sweep" id="radar-sweep"></div>
         </div>
 
-        <form id="query-form" class="query-form" autocomplete="off">
-          <label for="query-input" class="query-label">SUBJECT QUERY //</label>
-          <div class="input-row">
-            <span class="prompt-glyph">&gt;</span>
-            <input
-              type="text"
-              id="query-input"
-              class="query-input"
-              placeholder="describe what you are looking for..."
-              required
-            />
-            <button type="submit" class="scan-btn" id="scan-btn">SCAN</button>
+        <form id="build-form" autocomplete="off">
+          <label for="file-input" class="manifest-label">FILE MANIFEST //</label>
+
+          <div class="drop-zone" id="drop-zone">
+            <span class="drop-zone-text">CLICK OR DROP FILES TO ADD TO MANIFEST</span>
+            <input type="file" id="file-input" multiple />
           </div>
-          <div class="status-line" id="status-line">SYSTEM IDLE // AWAITING INPUT</div>
+          <p class="manifest-note">LIMIT: 5 MB PER FILE &nbsp;·&nbsp; 20 MB PER MANIFEST</p>
+
+          <div class="file-list" id="file-list"></div>
+
+          <button type="submit" class="build-btn" id="build-btn" disabled>BUILD INDEX</button>
+
+          <div class="progress-track" id="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+
+          <div class="status-line" id="status-line">SYSTEM IDLE // AWAITING MANIFEST</div>
         </form>
       </section>
 
-      <section class="results" id="results" aria-live="polite">
-        <!-- dossier cards get injected here by js/search.js -->
+      <section class="build-log" id="build-log" aria-live="polite">
+        <!-- log lines get injected here by js/build.js -->
+      </section>
+
+      <section class="embeddings-out" id="embeddings-out" hidden>
+        <p class="embeddings-note">
+          EMBEDDINGS GENERATED IN YOUR BROWSER // NOT STORED ON THE VECTOR-SEEK SERVER —
+          SAVE THIS FILE YOURSELF BEFORE YOU LEAVE THE PAGE.
+        </p>
+        <div class="embeddings-actions">
+          <button type="button" class="embeddings-btn" id="download-btn">DOWNLOAD embeddings.json</button>
+          <button type="button" class="embeddings-btn embeddings-btn-ghost" id="copy-btn">COPY TO CLIPBOARD</button>
+        </div>
       </section>
 
     </main>
@@ -87,6 +102,6 @@
   </div>
 
   <script src="js/common.js"></script>
-  <script src="js/search.js"></script>
+  <script src="js/build.js"></script>
 </body>
 </html>
