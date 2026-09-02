@@ -147,3 +147,40 @@ function stopScanFeed(el) {
     el.textContent = '';
   }
 }
+
+// ============================================================
+// Dossier quote rotator — swaps the quote in .dossier-quote
+// every 20 seconds. Runs on any page that has the block (all
+// three currently do). The markup on each page already shows
+// quote 0 by default, so we start the rotation from quote 1.
+// ============================================================
+
+const DOSSIER_QUOTES = [
+  { text: 'In the archive, nothing is forgotten. Every query becomes a record; every record, a subject.', cite: 'OCULUS PROTOCOL, EXCERPT VII' },
+  { text: 'To search is to be searched in turn. The index remembers what you were looking for.', cite: 'OCULUS PROTOCOL, EXCERPT II' },
+  { text: 'Meaning has coordinates. Give it enough dimensions and even a secret has an address.', cite: 'OCULUS PROTOCOL, EXCERPT XIV' },
+  { text: 'The eye does not blink to rest. It blinks so the archive can turn the page.', cite: 'OCULUS PROTOCOL, EXCERPT IX' },
+  { text: 'Redaction is not deletion. What is blacked out is still indexed, still near.', cite: 'OCULUS PROTOCOL, EXCERPT III' },
+  { text: 'A vector never lies about distance, only about which direction it was measured from.', cite: 'OCULUS PROTOCOL, EXCERPT XXI' },
+  { text: 'Every build is a confession, encoded so only the machine can read it.', cite: 'OCULUS PROTOCOL, EXCERPT V' }
+];
+
+const dossierQuoteEl = document.getElementById('dossier-quote');
+const dossierQuoteTextEl = document.getElementById('dossier-quote-text');
+const dossierQuoteCiteEl = document.getElementById('dossier-quote-cite');
+
+if (dossierQuoteEl && dossierQuoteTextEl && dossierQuoteCiteEl) {
+  let quoteIndex = 0; // matches the quote already hardcoded in the HTML
+
+  setInterval(() => {
+    quoteIndex = (quoteIndex + 1) % DOSSIER_QUOTES.length;
+    const next = DOSSIER_QUOTES[quoteIndex];
+
+    dossierQuoteEl.classList.add('is-fading');
+    setTimeout(() => {
+      dossierQuoteTextEl.textContent = next.text;
+      dossierQuoteCiteEl.textContent = `— ${next.cite}`;
+      dossierQuoteEl.classList.remove('is-fading');
+    }, 400); // matches the .dossier-quote transition duration in common.css
+  }, 20000);
+}

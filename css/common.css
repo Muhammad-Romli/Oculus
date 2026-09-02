@@ -393,6 +393,58 @@ body {
   .scan-feed.is-flicker { animation: none; }
 }
 
+/* -------------------------------------------------------
+   Static page description + rotating dossier quote
+   Shared across all three pages. index.html already had its
+   own dossier-quote before this was shared — if home.css also
+   defines .dossier-quote, its rules win there (loaded after
+   common.css); build.css/search.css have no such rule yet, so
+   this is the only styling in effect on those two pages.
+   ------------------------------------------------------- */
+
+.page-desc {
+  max-width: 60ch;
+  margin: 0 auto 28px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--paper);
+}
+
+.dossier-quote {
+  max-width: 60ch;
+  margin: 0 auto 40px;
+  padding: 18px 22px;
+  border-left: 2px solid var(--redact-dim);
+  background: rgba(255, 176, 0, 0.03);
+  font-size: 14px;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--amber-dim);
+  transition: opacity 0.4s ease;
+}
+
+.dossier-quote p {
+  margin: 0;
+}
+
+.dossier-quote cite {
+  display: block;
+  margin-top: 10px;
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--redact-dim);
+}
+
+.dossier-quote.is-fading {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dossier-quote { transition: none; }
+}
+
 .site-footer {
   margin-top: 60px;
   display: flex;

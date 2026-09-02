@@ -37,6 +37,19 @@
 
     <main>
 
+      <p class="page-desc">
+        This is the retrieval console. Describe what you're looking for in
+        plain language — Vector-Seek compares your query's meaning against
+        everything already indexed, so close wording isn't required. Results
+        are ranked by how near their meaning sits to yours, not by exact
+        keyword matches.
+      </p>
+
+      <blockquote class="dossier-quote" id="dossier-quote">
+        <p id="dossier-quote-text">In the archive, nothing is forgotten. Every query becomes a record; every record, a subject.</p>
+        <cite id="dossier-quote-cite">— OCULUS PROTOCOL, EXCERPT VII</cite>
+      </blockquote>
+
       <section class="console" id="console" aria-label="Query console">
         <div class="console-eye" id="console-eye">
           <svg viewBox="0 0 200 120" class="eye-svg" id="eye-svg">
@@ -60,7 +73,7 @@
               type="text"
               id="query-input"
               class="query-input"
-              placeholder="INPUT QUERY..."
+              placeholder="describe what you are looking for..."
               required
             />
             <button type="submit" class="scan-btn" id="scan-btn">SCAN</button>
