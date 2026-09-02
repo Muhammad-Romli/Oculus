@@ -1,7 +1,8 @@
 // ============================================================
 // OCULUS // VECTOR-SEEK — search.html behavior
-// Shared setup (bg eyes, pupil tracking, footer node id) lives
-// in common.js and runs before this file.
+// Shared setup (bg eyes, pupil tracking, footer node id, scan
+// feed, page transitions) lives in common.js and runs before
+// this file.
 //
 // The actual backend call is stubbed out in fetchResults().
 // Replace that function once you give me your FastAPI route
@@ -12,6 +13,8 @@ const form = document.getElementById('query-form');
 const input = document.getElementById('query-input');
 const statusLine = document.getElementById('status-line');
 const resultsEl = document.getElementById('results');
+const consoleEl = document.getElementById('console');
+const scanFeedEl = document.getElementById('scan-feed');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -20,6 +23,8 @@ form.addEventListener('submit', async (e) => {
 
   setStatus('SCANNING...', 'scanning');
   resultsEl.innerHTML = '';
+  consoleEl.classList.add('is-scanning');
+  startScanFeed(scanFeedEl);
 
   try {
     const results = await fetchResults(query);
@@ -29,6 +34,9 @@ form.addEventListener('submit', async (e) => {
     console.error(err);
     setStatus('SIGNAL LOST // CONNECTION TO ENGINE FAILED', 'error');
     resultsEl.innerHTML = `<div class="error-block">UNABLE TO REACH VECTOR-SEEK BACKEND</div>`;
+  } finally {
+    consoleEl.classList.remove('is-scanning');
+    stopScanFeed(scanFeedEl);
   }
 });
 

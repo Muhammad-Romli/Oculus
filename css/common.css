@@ -41,10 +41,6 @@ body {
   color: var(--void);
 }
 
-/* -------------------------------------------------------
-   Ambient background: noise, scanlines, drifting watchers
-   ------------------------------------------------------- */
-
 .bg-noise {
   position: fixed;
   inset: 0;
@@ -103,10 +99,6 @@ body {
   95%           { transform: scaleY(0.08); }
 }
 
-/* -------------------------------------------------------
-   Aperture load-in
-   ------------------------------------------------------- */
-
 .aperture {
   position: fixed;
   inset: 0;
@@ -126,9 +118,22 @@ body {
   .aperture { animation: none; clip-path: circle(0% at 50% 40%); }
 }
 
-/* -------------------------------------------------------
-   Layout shell
-   ------------------------------------------------------- */
+/* reverse of the load-in reveal — plays on nav-link click, before the
+   browser actually navigates away. --tx/--ty are set from the click
+   position in common.js, so the iris closes in on wherever you clicked
+   instead of always the center. */
+.aperture.is-closing {
+  animation: aperture-close 0.55s cubic-bezier(.7,0,.2,1) forwards;
+}
+
+@keyframes aperture-close {
+  from { clip-path: circle(0% at var(--tx, 50%) var(--ty, 40%)); }
+  to   { clip-path: circle(140% at var(--tx, 50%) var(--ty, 40%)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aperture.is-closing { animation: none; }
+}
 
 .wrap {
   position: relative;
@@ -137,10 +142,6 @@ body {
   margin: 0 auto;
   padding: 48px 20px 80px;
 }
-
-/* -------------------------------------------------------
-   Header + nav
-   ------------------------------------------------------- */
 
 .site-header {
   text-align: center;
@@ -235,10 +236,6 @@ body {
   background: var(--amber);
 }
 
-/* -------------------------------------------------------
-   Console / eye component (shared by Build + Search)
-   ------------------------------------------------------- */
-
 .console {
   background: var(--panel);
   border: 1px solid var(--panel-edge);
@@ -284,10 +281,6 @@ body {
   filter: drop-shadow(0 0 6px var(--amber-glow));
   transition: transform 0.06s linear;
   transform-origin: 100px 60px;
-  /* no animation here on purpose — JS drives this element's transform
-     for cursor tracking; the blink is applied to #iris-group instead,
-     since a CSS animation on this element would fight the JS transform
-     every frame and cursor tracking would never visibly move it. */
 }
 
 .reticle {
@@ -360,8 +353,45 @@ body {
 .error-block { color: var(--redact); }
 
 /* -------------------------------------------------------
-   Footer
+   Scan feed — rotating status text shown while a request
+   is in flight. Occupies attention during the wait; not
+   real log output, just flavor text (see startScanFeed()
+   in common.js).
    ------------------------------------------------------- */
+
+.scan-feed {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--amber-dim);
+  min-height: 14px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.scan-feed.is-active {
+  opacity: 1;
+}
+
+.scan-feed.is-flicker {
+  animation: feed-flicker 0.25s steps(2);
+}
+
+@keyframes feed-flicker {
+  0%   { opacity: 0.15; transform: translateX(-2px); }
+  50%  { opacity: 0.7;  transform: translateX(2px); }
+  100% { opacity: 1;    transform: translateX(0); }
+}
+
+/* console speeds up its radar sweep while a request is running,
+   as a small "working harder" cue on top of the status-line pulse */
+.console.is-scanning .radar-sweep {
+  animation-duration: 1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-feed.is-flicker { animation: none; }
+}
 
 .site-footer {
   margin-top: 60px;
@@ -394,19 +424,11 @@ body {
   50% { opacity: 0.25; }
 }
 
-/* -------------------------------------------------------
-   Responsive (shared)
-   ------------------------------------------------------- */
-
 @media (max-width: 520px) {
   .logo { font-size: 44px; letter-spacing: 3px; }
   .console { padding: 24px 16px 18px; }
   .site-nav { flex-wrap: wrap; width: auto; }
 }
-
-/* -------------------------------------------------------
-   Accessible focus states
-   ------------------------------------------------------- */
 
 a:focus-visible,
 button:focus-visible,

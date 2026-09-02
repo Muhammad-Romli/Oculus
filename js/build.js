@@ -1,15 +1,13 @@
 // ============================================================
 // OCULUS // VECTOR-SEEK — build.html behavior
-// Shared setup (bg eyes, pupil tracking, footer node id) lives
-// in common.js and runs before this file.
+// Shared setup (bg eyes, pupil tracking, footer node id, page
+// transitions) lives in common.js and runs before this file.
 //
 // The actual backend call is stubbed out in runBuild().
 // Replace that function once you give me your FastAPI route
 // details — everything else here already works standalone.
 // ============================================================
 
-// Guardrails so a big upload can't choke a free-tier server.
-// Tune these to whatever your backend/host can actually handle.
 const MAX_FILE_SIZE = 5 * 1024 * 1024;   // 5 MB per file
 const MAX_TOTAL_SIZE = 20 * 1024 * 1024; // 20 MB per manifest
 
@@ -25,11 +23,11 @@ const buildLogEl = document.getElementById('build-log');
 const embeddingsOut = document.getElementById('embeddings-out');
 const downloadBtn = document.getElementById('download-btn');
 const copyBtn = document.getElementById('copy-btn');
+const consoleEl = document.getElementById('console');
 
 let selectedFiles = [];
-let lastEmbeddings = null; // holds the result in memory only — never sent anywhere but the browser
+let lastEmbeddings = null;
 
-// ---- picking files: click-to-browse or drag-and-drop --------
 dropZone.addEventListener('click', () => fileInput.click());
 
 dropZone.addEventListener('dragover', (e) => {
@@ -49,11 +47,9 @@ dropZone.addEventListener('drop', (e) => {
 
 fileInput.addEventListener('change', () => {
   addFiles(fileInput.files);
-  fileInput.value = ''; // lets you re-pick the same file later if you remove and re-add it
+  fileInput.value = '';
 });
 
-// ---- guardrail: reject files that are too big before they ever
-// touch the manifest, instead of finding out after a slow upload ----
 function addFiles(fileList) {
   let runningTotal = selectedFiles.reduce((sum, f) => sum + f.size, 0);
 
@@ -105,7 +101,6 @@ function formatBytes(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-// ---- trigger the build pipeline ------------------------------
 buildForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!selectedFiles.length) return;
@@ -115,6 +110,7 @@ buildForm.addEventListener('submit', async (e) => {
   embeddingsOut.hidden = true;
   lastEmbeddings = null;
   setStatus('BUILDING INDEX...', 'scanning');
+  consoleEl.classList.add('is-scanning');
   showProgress(0);
 
   try {
@@ -129,6 +125,7 @@ buildForm.addEventListener('submit', async (e) => {
     appendLog({ text: 'BUILD ABORTED — CONNECTION TO ENGINE FAILED', kind: 'fail' });
   } finally {
     buildBtn.disabled = false;
+    consoleEl.classList.remove('is-scanning');
   }
 });
 
@@ -151,11 +148,6 @@ function appendLog({ text, kind }) {
   row.innerHTML = `<span class="log-time">${time}</span><span class="log-text">${escapeHtml(text)}</span>`;
   buildLogEl.appendChild(row);
 }
-
-// ---- download / copy the result — client-side only -----------
-// Nothing here touches the server: the JSON already lives in this
-// tab's memory (lastEmbeddings), so both buttons just hand it to
-// the browser's own download or clipboard APIs.
 
 downloadBtn.addEventListener('click', () => {
   if (!lastEmbeddings) return;
@@ -181,30 +173,6 @@ copyBtn.addEventListener('click', async () => {
   }
 });
 
-// =============================================================
-// STUB — replace this with your real fetch() call once you
-// have your FastAPI endpoint, request body, and response shape
-// figured out. This currently fakes a multi-step build with a
-// short delay per file, and returns a fake embeddings object so
-// you can see the download/copy flow working end to end.
-//
-// Real version will look roughly like:
-//
-//   async function runBuild(files, onLog) {
-//     const formData = new FormData();
-//     files.forEach((f) => formData.append('files', f));
-//
-//     const res = await fetch('http://localhost:8000/build', {
-//       method: 'POST',
-//       body: formData
-//     });
-//     if (!res.ok) throw new Error('bad response');
-//     const data = await res.json();
-//     data.log.forEach((line) => onLog({ text: line }));
-//     return data.embeddings; // whatever your backend hands back —
-//                             // this function just needs to return it
-//   }
-// =============================================================
 async function runBuild(files, onLog) {
   onLog({ text: `MANIFEST RECEIVED // ${files.length} FILE${files.length === 1 ? '' : 'S'}` });
   await new Promise((r) => setTimeout(r, 400));
@@ -218,7 +186,7 @@ async function runBuild(files, onLog) {
     vectors.push({
       file: files[i].name,
       size: files[i].size,
-      vector: Array.from({ length: 8 }, () => Number(Math.random().toFixed(4))) // placeholder — real vectors are much longer
+      vector: Array.from({ length: 8 }, () => Number(Math.random().toFixed(4)))
     });
   }
 
