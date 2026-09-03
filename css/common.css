@@ -445,6 +445,165 @@ body {
   .dossier-quote { transition: none; }
 }
 
+/* -------------------------------------------------------
+   Search mode selector (search.html only, but kept here
+   alongside the other shared console pieces)
+   ------------------------------------------------------- */
+
+.mode-select {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+  border: 1px solid var(--panel-edge);
+  background: var(--void-2);
+  width: fit-content;
+}
+
+.mode-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--panel-edge);
+  color: var(--amber-dim);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.mode-btn:last-child {
+  border-right: none;
+}
+
+.mode-btn:hover {
+  color: var(--amber);
+  background: var(--amber-faint);
+}
+
+.mode-btn.is-active {
+  color: var(--void);
+  background: var(--amber);
+}
+
+.mode-desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--amber-dim);
+  max-width: 56ch;
+  margin: 0 0 20px;
+}
+
+.mode-field {
+  margin-top: 4px;
+}
+
+.vector-input {
+  width: 100%;
+  resize: vertical;
+  background: var(--void-2);
+  border: 1px solid var(--panel-edge);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.vector-input:focus {
+  outline: 2px solid var(--amber);
+  outline-offset: 1px;
+}
+
+.drop-zone-small {
+  padding: 14px;
+  font-size: 11px;
+}
+
+.scan-btn-block {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* -------------------------------------------------------
+   File manifest / drop-zone — originally build.html only,
+   now also used by search.html's "PRIVATE FILE" mode, so
+   it's shared here rather than duplicated. If your real
+   build.css already styles these classes, its rules win on
+   build.html (loaded after common.css) — this is only the
+   effective style on search.html, where no such rules exist.
+   ------------------------------------------------------- */
+
+.manifest-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--amber-dim);
+  margin-bottom: 8px;
+}
+
+.drop-zone {
+  position: relative;
+  border: 1px dashed var(--panel-edge);
+  background: rgba(255, 176, 0, 0.02);
+  text-align: center;
+  padding: 26px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.drop-zone:hover,
+.drop-zone.is-dragover {
+  border-color: var(--amber-dim);
+  background: var(--amber-faint);
+}
+
+.drop-zone-text {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--amber-dim);
+}
+
+.drop-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-list {
+  margin-top: 10px;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--panel-edge);
+  font-size: 12px;
+}
+
+.file-name {
+  flex: 1;
+  color: var(--amber);
+  overflow-wrap: anywhere;
+}
+
+.file-size {
+  color: var(--amber-dim);
+}
+
+.file-remove {
+  background: none;
+  border: none;
+  color: var(--redact);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
 .site-footer {
   margin-top: 60px;
   display: flex;

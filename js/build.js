@@ -173,31 +173,41 @@ copyBtn.addEventListener('click', async () => {
   }
 });
 
+// =============================================================
+// Wired to your real backend: POST /build-preview on API_BASE_URL
+// (set in common.js). This is the visitor-facing "try it yourself"
+// endpoint from main.py — it never touches embeddings.json or the
+// shared search index, and returns the built embeddings directly
+// in the response so this function can just return them.
+//
+// One honest gap: I don't know the exact shape of what
+// metadata_to_vector() returns, so I can't confirm the download/
+// copy JSON will look a particular way — but since this function
+// only needs to hand back whatever came from the server (it doesn't
+// need to read specific fields out of it), that's fine either way.
+// =============================================================
 async function runBuild(files, onLog) {
   onLog({ text: `MANIFEST RECEIVED // ${files.length} FILE${files.length === 1 ? '' : 'S'}` });
-  await new Promise((r) => setTimeout(r, 400));
+  showProgress(15); // no incremental progress from the server — this just shows movement while the request is in flight
 
-  const vectors = [];
+  const formData = new FormData();
+  files.forEach((f) => formData.append('files', f));
 
-  for (let i = 0; i < files.length; i++) {
-    await new Promise((r) => setTimeout(r, 350));
-    onLog({ text: `EMBEDDING ${files[i].name}...`, kind: 'ok' });
-    showProgress(Math.round(((i + 1) / files.length) * 90));
-    vectors.push({
-      file: files[i].name,
-      size: files[i].size,
-      vector: Array.from({ length: 8 }, () => Number(Math.random().toFixed(4)))
-    });
+  const res = await fetch(`${API_BASE_URL}/build-preview`, {
+    method: 'POST',
+    body: formData
+  });
+
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '');
+    throw new Error(`build-preview failed: ${res.status} ${detail}`);
   }
 
-  await new Promise((r) => setTimeout(r, 400));
-  onLog({ text: 'INDEX WRITTEN TO DISK', kind: 'ok' });
+  showProgress(90);
+  const embeddings = await res.json();
+  onLog({ text: 'INDEX RECEIVED FROM ENGINE', kind: 'ok' });
 
-  return {
-    model: 'vector-seek-stub',
-    generated_at: new Date().toISOString(),
-    embeddings: vectors
-  };
+  return embeddings;
 }
 
 function escapeHtml(str) {

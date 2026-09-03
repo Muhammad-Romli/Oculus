@@ -66,8 +66,16 @@
         </div>
 
         <form id="query-form" class="query-form" autocomplete="off">
-          <label for="query-input" class="query-label">SUBJECT QUERY //</label>
-          <div class="input-row">
+
+          <div class="mode-select" id="mode-select" role="tablist" aria-label="Search mode">
+            <button type="button" class="mode-btn is-active" data-mode="demo" role="tab" aria-selected="true">SHARED ARCHIVE</button>
+            <button type="button" class="mode-btn" data-mode="file" role="tab" aria-selected="false">PRIVATE FILE</button>
+            <button type="button" class="mode-btn" data-mode="vector" role="tab" aria-selected="false">RAW VECTOR</button>
+          </div>
+          <p class="mode-desc" id="mode-desc">Search Vector-Seek's own sample records — a shared folder of animal facts. Good for trying semantic search without uploading anything.</p>
+
+          <label for="query-input" class="query-label" id="query-label">SUBJECT QUERY //</label>
+          <div class="input-row" id="query-row">
             <span class="prompt-glyph">&gt;</span>
             <input
               type="text"
@@ -78,6 +86,28 @@
             />
             <button type="submit" class="scan-btn" id="scan-btn">SCAN</button>
           </div>
+
+          <div class="mode-field" id="mode-field-file" hidden>
+            <label for="search-file-input" class="manifest-label">FILE TO SEARCH WITHIN //</label>
+            <div class="drop-zone drop-zone-small" id="search-drop-zone">
+              <span class="drop-zone-text">CLICK OR DROP A FILE</span>
+              <input type="file" id="search-file-input" />
+            </div>
+            <div class="file-list" id="search-file-list"></div>
+            <button type="submit" class="scan-btn scan-btn-block" id="scan-btn-file">SCAN</button>
+          </div>
+
+          <div class="mode-field" id="mode-field-vector" hidden>
+            <label for="vector-input" class="query-label">EMBEDDING VECTOR, COMMA-SEPARATED //</label>
+            <textarea
+              id="vector-input"
+              class="vector-input"
+              rows="3"
+              placeholder="0.0123, -0.048, 0.211, ..."
+            ></textarea>
+            <button type="submit" class="scan-btn scan-btn-block" id="scan-btn-vector">SCAN</button>
+          </div>
+
           <div class="status-line" id="status-line">SYSTEM IDLE // AWAITING INPUT</div>
           <div class="scan-feed" id="scan-feed" aria-hidden="true"></div>
         </form>

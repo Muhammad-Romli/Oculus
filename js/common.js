@@ -5,6 +5,9 @@
 // own file and is loaded after this one.
 // ============================================================
 
+
+const API_BASE_URL = 'https://vector-seek.fastapicloud.dev';
+
 // ---- ambient background eyes -------------------------------
 const bgEyesContainer = document.getElementById('bg-eyes');
 const EYE_COUNT = 26;
