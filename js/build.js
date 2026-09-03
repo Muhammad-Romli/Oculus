@@ -173,41 +173,59 @@ copyBtn.addEventListener('click', async () => {
   }
 });
 
-// =============================================================
-// Wired to your real backend: POST /build-preview on API_BASE_URL
-// (set in common.js). This is the visitor-facing "try it yourself"
-// endpoint from main.py — it never touches embeddings.json or the
-// shared search index, and returns the built embeddings directly
-// in the response so this function can just return them.
-//
-// One honest gap: I don't know the exact shape of what
-// metadata_to_vector() returns, so I can't confirm the download/
-// copy JSON will look a particular way — but since this function
-// only needs to hand back whatever came from the server (it doesn't
-// need to read specific fields out of it), that's fine either way.
-// =============================================================
+
 async function runBuild(files, onLog) {
   onLog({ text: `MANIFEST RECEIVED // ${files.length} FILE${files.length === 1 ? '' : 'S'}` });
-  showProgress(15); // no incremental progress from the server — this just shows movement while the request is in flight
 
-  const formData = new FormData();
-  files.forEach((f) => formData.append('files', f));
+  const filePayloads = await Promise.all(files.map(fileToPayload));
 
-  const res = await fetch(`${API_BASE_URL}/build-preview`, {
-    method: 'POST',
-    body: formData
+  return new Promise((resolve, reject) => {
+    // API_BASE_URL is http(s):// — websockets need ws(s):// instead.
+    const wsUrl = API_BASE_URL.replace(/^http/, 'ws') + '/ws/build-preview';
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ files: filePayloads }));
+    };
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+
+      if (msg.type === 'progress') {
+        const pct = Math.round((msg.current / msg.total) * 100);
+        showProgress(pct);
+        onLog({ text: `EMBEDDING // ${msg.current}/${msg.total} CHUNKS` });
+      } else if (msg.type === 'done') {
+        onLog({ text: 'INDEX RECEIVED FROM ENGINE', kind: 'ok' });
+        ws.close();
+        resolve(msg.result);
+      } else if (msg.type === 'build_error') {
+        ws.close();
+        reject(new Error(msg.detail));
+      }
+    };
+
+    ws.onerror = () => {
+      reject(new Error('WebSocket connection to build engine failed'));
+    };
   });
+}
 
-  if (!res.ok) {
-    const detail = await res.text().catch(() => '');
-    throw new Error(`build-preview failed: ${res.status} ${detail}`);
-  }
-
-  showProgress(90);
-  const embeddings = await res.json();
-  onLog({ text: 'INDEX RECEIVED FROM ENGINE', kind: 'ok' });
-
-  return embeddings;
+// Reads a File into { filename, content_base64 } for sending over
+// the websocket as JSON (WebSocket JSON messages can't carry raw
+// binary the way FormData could).
+function fileToPayload(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      // reader.result looks like "data:<mime>;base64,AAAA..." — we
+      // only want the part after the comma.
+      const content_base64 = reader.result.split(',')[1];
+      resolve({ filename: file.name, content_base64 });
+    };
+    reader.onerror = () => reject(new Error(`Failed to read ${file.name}`));
+    reader.readAsDataURL(file);
+  });
 }
 
 function escapeHtml(str) {
