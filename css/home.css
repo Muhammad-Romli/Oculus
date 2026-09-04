@@ -16,29 +16,6 @@
   color: var(--amber);
 }
 
-.dossier-quote {
-  margin: 0 auto 40px;
-  max-width: 480px;
-  padding: 18px 22px;
-  border-left: 3px solid var(--redact-dim);
-  background: rgba(255, 43, 43, 0.04);
-  font-family: var(--font-display);
-  font-size: 20px;
-  line-height: 1.4;
-  color: var(--paper);
-  text-align: left;
-}
-
-.dossier-quote cite {
-  display: block;
-  margin-top: 10px;
-  font-family: var(--font-mono);
-  font-style: normal;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--redact);
-}
-
 .entry-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
