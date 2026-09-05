@@ -3,13 +3,17 @@
 ![HTML](https://img.shields.io/badge/HTML5-orange)
 ![CSS](https://img.shields.io/badge/CSS3-blue)
 ![JavaScript](https://img.shields.io/badge/JavaScript-yellow)
-![Status](https://img.shields.io/badge/status-ongoing-yellow)
+![Status](https://img.shields.io/badge/status-completed-green)
 
-**Project Status:** 🚧 Ongoing — being built as side project.
+---
+
+## ✨ Project Status: Completed
 
 The web interface for [Vector-Seek](https://github.com/Muhammad-Romli/vector-seek) — a semantic search engine that retrieves results by **meaning**, not keyword matching. Oculus is the frontend; Vector-Seek is the backend doing the actual embedding and searching.
 
-> **Live site:** coming soon
+> **Live site:** [https://muhammad-romli.github.io/Oculus](https://muhammad-romli.github.io/Oculus)
+
+---
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -23,7 +27,7 @@ The web interface for [Vector-Seek](https://github.com/Muhammad-Romli/vector-see
 
 ## Introduction
 
-Oculus gives Vector-Seek a browser-based interface, so instead of running `build.sh` and `search.sh` from the terminal, users can build embeddings and run searches through a web page that talks to the Vector-Seek API.
+Oculus gives Vector-Seek a browser-based interface, so instead of running `build.sh` and `search.sh` from the terminal, users can build embeddings and run searches through a web page that talks to the Vector-Seek backend API.
 
 ## Pages
 
