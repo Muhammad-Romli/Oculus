@@ -15,6 +15,14 @@
 //                                      computed embedding, still
 //                                      searched against the
 //                                      shared archive)
+//
+// Backend note: search_top_similarities / compare_vectors return
+// a tuple (stored_metadatas, scores) — two parallel lists, not
+// one list of combined objects. FastAPI serializes that tuple as
+// a 2-element JSON array: [ [ {id, content, embedding, metadata}, ... ],
+// [0.87, 0.65, ...] ]. combineResults() below zips them together
+// so the rest of this file can just work with { id, content,
+// metadata, score } objects.
 // ============================================================
 
 const form = document.getElementById('query-form');
@@ -179,11 +187,7 @@ async function runSearch(requestFn) {
 
   try {
     const results = await requestFn();
-    // Debug aid: I don't know the exact field names your backend
-    // returns (search_top_similarities / compare_vectors), so check
-    // this in devtools and adjust the r.id / r.score / r.text / r.meta
-    // lookups in renderResults() below if they don't match.
-    console.log('Vector-Seek raw result:', results[0]);
+    console.log('Vector-Seek combined result:', results[0]);
     renderResults(results);
     setStatus(`SCAN COMPLETE // ${results.length} MATCH${results.length === 1 ? '' : 'ES'} FOUND`, '');
   } catch (err) {
@@ -203,13 +207,19 @@ function setStatus(text, mode) {
   if (mode === 'error') statusLine.classList.add('is-error');
 }
 
+// ---- combine backend's (items, scores) tuple into flat objects ----
+function combineResults(raw) {
+  const [items, scores] = raw;
+  return items.map((item, i) => ({ ...item, score: scores[i] }));
+}
+
 // ---- the three real backend calls ----------------------------
 
 async function fetchDemo(query) {
   const url = `${API_BASE_URL}/search-demo?q=${encodeURIComponent(query)}&n=5`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`search-demo failed: ${res.status}`);
-  return await res.json();
+  return combineResults(await res.json());
 }
 
 async function fetchByFile(file, query) {
@@ -222,7 +232,7 @@ async function fetchByFile(file, query) {
     body: formData
   });
   if (!res.ok) throw new Error(`search-by-file failed: ${res.status}`);
-  return await res.json();
+  return combineResults(await res.json());
 }
 
 async function fetchByVector(vector) {
@@ -232,7 +242,7 @@ async function fetchByVector(vector) {
     body: JSON.stringify(vector)
   });
   if (!res.ok) throw new Error(`search-by-vector failed: ${res.status}`);
-  return await res.json();
+  return combineResults(await res.json());
 }
 
 function renderResults(results) {
@@ -244,13 +254,18 @@ function renderResults(results) {
   resultsEl.innerHTML = results.map((r) => `
     <article class="dossier">
       <div class="dossier-head">
-        <span class="dossier-id">${escapeHtml(r.id ?? 'UNKNOWN')}</span>
+        <span class="dossier-id">${escapeHtml(String(r.id ?? 'UNKNOWN'))}</span>
         <span class="dossier-score">${Math.round((r.score ?? 0) * 100)}%</span>
       </div>
-      <p class="dossier-body">${escapeHtml(r.text ?? '')}</p>
-      <div class="dossier-meta">${escapeHtml(r.meta ?? '')}</div>
+      <p class="dossier-body">${escapeHtml(r.content ?? '')}</p>
+      <div class="dossier-meta">${escapeHtml(formatMeta(r.metadata))}</div>
     </article>
   `).join('');
+}
+
+function formatMeta(meta) {
+  if (!meta || typeof meta !== 'object') return '';
+  return Object.entries(meta).map(([k, v]) => `${k}: ${v}`).join(' | ');
 }
 
 function escapeHtml(str) {
