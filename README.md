@@ -13,6 +13,8 @@ The web interface for [Vector-Seek](https://github.com/Muhammad-Romli/vector-see
 
 > **Live site:** [https://muhammad-romli.github.io/Oculus](https://muhammad-romli.github.io/Oculus)
 
+> **Note:** This frontend was built using AI. My primary focus for this project was on building and connecting the backend using FastAPI, which is in a separate repository. All my other current projects were built by me from scratch.
+
 ---
 
 ## Table of Contents
