@@ -9,7 +9,7 @@
 
 ## ✨ Project Status: Completed
 
-The web interface for [Vector-Seek](https://github.com/Muhammad-Romli/vector-seek) — a semantic search engine that retrieves results by **meaning**, not keyword matching. Oculus is the frontend; Vector-Seek is the backend doing the actual embedding and searching.
+The web interface for [Vector-Seek](https://github.com/Muhammad-Romli/vector-seek) — a semantic search engine that retrieves results by **meaning**, not keyword matching. Oculus is the frontend;[...]
 
 > **Live site:** [https://muhammad-romli.github.io/Oculus](https://muhammad-romli.github.io/Oculus)
 
@@ -27,7 +27,7 @@ The web interface for [Vector-Seek](https://github.com/Muhammad-Romli/vector-see
 
 ## Introduction
 
-Oculus gives Vector-Seek a browser-based interface, so instead of running `build.sh` and `search.sh` from the terminal, users can build embeddings and run searches through a web page that talks to the Vector-Seek backend API.
+Oculus gives Vector-Seek a browser-based interface, so instead of running `build.sh` and `search.sh` from the terminal, users can build embeddings and run searches through a web page that talks to[...]
 
 ## Pages
 
@@ -87,4 +87,14 @@ Oculus is hosted on [Render](https://render.com).
 
 #### Screenshots
 
-*(coming soon)*
+**Homepage**
+![Homepage](./images-preview/homepage.png)
+
+**Build Page**
+![Build Page](./images-preview/build.png)
+
+**Build Results**
+![Build Results](./images-preview/build_result.png)
+
+**Search Page**
+![Search Page](./images-preview/search.png)
